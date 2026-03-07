@@ -1,14 +1,20 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'core/push_notification_service.dart';
 import 'core/router.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  await Firebase.initializeApp();
+
   await Supabase.initialize(
     url: 'https://vgpkmlzzwrnkzlaakumo.supabase.co',
     anonKey: 'sb_publishable_wTTgITCQpygTpcDrdlL8KA_QN_9vrNS',
   );
+
+  await PushNotificationService.instance.initialize();
 
   runApp(const LendMateApp());
 }
