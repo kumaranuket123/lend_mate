@@ -1,6 +1,8 @@
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../features/auth/ui/forgot_password_screen.dart';
 import '../features/auth/ui/login_screen.dart';
+import '../features/auth/ui/otp_verify_screen.dart';
 import '../features/auth/ui/signup_screen.dart';
 import '../features/home/ui/home_screen.dart';
 import '../features/loan/ui/create_loan_screen.dart';
@@ -15,7 +17,9 @@ final appRouter = GoRouter(
     final session = Supabase.instance.client.auth.currentSession;
     final isAuth = session != null;
     final isAuthRoute = state.matchedLocation == '/login' ||
-        state.matchedLocation == '/signup';
+        state.matchedLocation == '/signup' ||
+        state.matchedLocation == '/forgot-password' ||
+        state.matchedLocation == '/otp-verify';
 
     if (!isAuth && !isAuthRoute) return '/login';
     if (isAuth && isAuthRoute) return '/home';
@@ -23,8 +27,13 @@ final appRouter = GoRouter(
   },
   routes: [
     GoRoute(path: '/',       redirect: (_, __) => '/login'),
-    GoRoute(path: '/login',  builder: (_, __) => const LoginScreen()),
-    GoRoute(path: '/signup', builder: (_, __) => const SignupScreen()),
+    GoRoute(path: '/login',            builder: (_, __) => const LoginScreen()),
+    GoRoute(path: '/signup',           builder: (_, __) => const SignupScreen()),
+    GoRoute(path: '/forgot-password',  builder: (_, __) => const ForgotPasswordScreen()),
+    GoRoute(
+      path: '/otp-verify',
+      builder: (_, state) => OtpVerifyScreen(email: state.extra as String),
+    ),
     GoRoute(path: '/home',        builder: (_, __) => const HomeScreen()),
     GoRoute(path: '/create-loan', builder: (_, __) => const CreateLoanScreen()),
     GoRoute(

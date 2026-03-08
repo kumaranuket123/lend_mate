@@ -143,7 +143,7 @@ class _LoginViewState extends State<_LoginView> {
                   Align(
                     alignment: Alignment.centerRight,
                     child: TextButton(
-                      onPressed: () {}, // TODO: forgot password
+                      onPressed: () => context.push('/forgot-password'),
                       child: const Text('Forgot password?'),
                     ),
                   ),

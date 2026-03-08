@@ -33,6 +33,30 @@ class AuthRepository {
     return res;
   }
 
+  /// Sends a 6-digit OTP to the email for password reset.
+  Future<void> sendOtp(String email) async {
+    debugPrint('[Auth] sendOtp → email=$email');
+    await supabase.auth.signInWithOtp(email: email);
+    debugPrint('[Auth] sendOtp ✓');
+  }
+
+  /// Verifies the OTP, establishes a session, then updates the password.
+  Future<void> verifyOtpAndResetPassword({
+    required String email,
+    required String otp,
+    required String newPassword,
+  }) async {
+    debugPrint('[Auth] verifyOtp → email=$email');
+    await supabase.auth.verifyOTP(
+      email: email,
+      token: otp,
+      type: OtpType.email,
+    );
+    debugPrint('[Auth] verifyOtp ✓ → updating password');
+    await supabase.auth.updateUser(UserAttributes(password: newPassword));
+    debugPrint('[Auth] password updated ✓');
+  }
+
   Future<void> signOut() async {
     debugPrint('[Auth] signOut →');
     await supabase.auth.signOut();
